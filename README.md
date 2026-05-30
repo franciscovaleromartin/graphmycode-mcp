@@ -64,7 +64,7 @@ Once installed, these commands are available in Claude Code:
 
 | Command | Description |
 |---------|-------------|
-| `/graphmycode-analyze` | Hotspots, dead code, coupling summary |
+| `/graphmycode` | Hotspots, dead code, coupling summary |
 | `/graphmycode-debt` | Prioritized technical debt backlog (P1/P2/P3) |
 | `/graphmycode-flow` | Execution flow from entry points |
 | `/graphmycode-heatmap` | Circular dependencies and hotspot heatmap |
