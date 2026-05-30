@@ -1,14 +1,35 @@
 {
   "name": "graphmycode-mcp",
   "version": "0.1.0",
+  "description": "MCP server for codebase structure analysis — dependency graphs, communities, hotspots, and agent context generation",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "graphmycode-mcp": "scripts/cli.mjs"
+  },
+  "files": [
+    "dist",
+    "commands",
+    "scripts"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
-    "test": "vitest run --reporter=verbose"
+    "test": "vitest run --reporter=verbose",
+    "prepublishOnly": "npm run build",
+    "postinstall": "node scripts/postinstall.mjs"
   },
+  "keywords": [
+    "mcp",
+    "claude",
+    "codebase",
+    "dependency-graph",
+    "code-analysis",
+    "claude-code"
+  ],
+  "author": "Francisco Valero",
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "zod": "^3.24.0"
