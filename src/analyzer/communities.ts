@@ -53,18 +53,17 @@ export function buildCommunities(graph: DependencyGraph): Map<string, Community>
         const b = groups[j]
         const merged = new Set([...a.files, ...b.files])
 
-        let crossEdges = 0
+        let internalEdges = 0
         let externalEdges = 0
         for (const edge of graph.edges) {
-          const fromMerged = merged.has(edge.from)
-          const toMerged = merged.has(edge.to)
-          if (fromMerged !== toMerged) externalEdges++
-          if ((a.files.has(edge.from) && b.files.has(edge.to)) ||
-              (b.files.has(edge.from) && a.files.has(edge.to))) crossEdges++
+          const fromIn = merged.has(edge.from)
+          const toIn = merged.has(edge.to)
+          if (fromIn && toIn) internalEdges++
+          else if (fromIn || toIn) externalEdges++
         }
 
-        const total = crossEdges + externalEdges
-        if (total > 0 && crossEdges / total > DENSITY_THRESHOLD) {
+        const total = internalEdges + externalEdges
+        if (total > 0 && internalEdges / total > DENSITY_THRESHOLD) {
           for (const f of b.files) a.files.add(f)
           groups.splice(j, 1)
           changed = true
