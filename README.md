@@ -2,9 +2,52 @@
 
 [![npm version](https://img.shields.io/npm/v/graphmycode-mcp)](https://www.npmjs.com/package/graphmycode-mcp)
 
-MCP server for codebase structure analysis. Provides dependency graphs, community detection, hotspot identification, and agent context generation.
+MCP server that turns any codebase into a dependency graph your AI agent can analyze, query, and use to detect real problems — before touching a single line of code.
 
 Works with **Claude Code, Cursor, Windsurf, Cline, Continue, Zed, and Google Antigravity**.
+
+---
+
+## What it does
+
+### Understand the codebase
+
+**"How is this thing organized?"**
+
+- Builds a **full dependency graph**: what each file imports, who imports it, and how many connections it has.
+- Detects the **tech stack** automatically: languages, frameworks, package manager, and project type.
+- Identifies **entry points** (main, index, CLI) with no configuration needed.
+
+### Detect problems
+
+**"Where are the weak spots?"**
+
+- **Hotspots** — files everything else depends on. If they change, a lot breaks. High refactor priority.
+- **Dead code** — files nobody imports. Safe to delete.
+- **Circular dependencies** — import cycles that make testing and maintenance painful.
+- **Coupling metrics** — fanIn, fanOut, edge count. One look tells you if the project is healthy or not.
+
+### Understand the architecture
+
+**"What does each part actually do?"**
+
+- **Module communities** — groups related files into functional clusters detected by graph analysis. Reveals the real architecture, not the one the user thinks they have.
+- **Architectural layers** — checks whether the project respects layer separation or violates it.
+
+### Ask in plain language
+
+**"Who imports this file?", "Are there cycles?", "What's unused?"**
+
+- The `query_graph` tool accepts natural language questions about the code — no need to understand the graph format.
+
+### Give your AI agent real context
+
+**"I want the agent to understand my project from message one"**
+
+- Generates a **`CLAUDE.md`** or **`AGENTS.md`** automatically, with the stack, build/test commands, module map, most critical files, and key dependencies.
+- The agent starts with actual project context, not generic assumptions.
+
+---
 
 ## Install
 
@@ -31,8 +74,6 @@ Restart your editor(s) after setup.
 ---
 
 ## Manual configuration per editor
-
-If you prefer to configure manually, add the following snippet to each editor's config file.
 
 ### Claude Code
 
@@ -120,7 +161,7 @@ Continue automatically picks up JSON files from `~/.continue/mcpServers/`.
 
 ### Google Antigravity
 
-File: `~/.gemini/config/mcp_config.json` (macOS/Linux)
+File: `~/.gemini/config/mcp_config.json` (macOS/Linux)  
 File: `C:\Users\<USER>\.gemini\antigravity\mcp_config.json` (Windows)
 
 ```json
@@ -177,6 +218,8 @@ File: `~/.config/zed/settings.json`
 | `/graphmycode-layers` | Architectural layers and violations |
 | `/graphmycode-semantic` | Module communities and logical duplication |
 | `/graphmycode-structural` | Structural dependency deep-dive |
+
+---
 
 ## Visual interface
 
