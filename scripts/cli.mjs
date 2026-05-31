@@ -1,8 +1,15 @@
 #!/usr/bin/env node
-// Punto de entrada CLI: "graphmycode-mcp setup" o el servidor MCP
-if (process.argv[2] === 'setup') {
-  const { setup } = await import('./setup.mjs');
-  setup();
+const [, , arg, subarg] = process.argv;
+
+if (arg === 'setup') {
+  const { setup, setupTool, setupAll } = await import('./setup.mjs');
+  if (!subarg) {
+    setup();
+  } else if (subarg === '--all') {
+    setupAll();
+  } else {
+    setupTool(subarg);
+  }
 } else {
   await import('../dist/index.js');
 }

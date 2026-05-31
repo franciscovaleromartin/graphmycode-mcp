@@ -2,7 +2,9 @@
 
 [![npm version](https://img.shields.io/npm/v/graphmycode-mcp)](https://www.npmjs.com/package/graphmycode-mcp)
 
-MCP server for codebase structure analysis. Provides dependency graphs, community detection, hotspot identification, and agent context generation directly inside Claude Code.
+MCP server for codebase structure analysis. Provides dependency graphs, community detection, hotspot identification, and agent context generation.
+
+Works with **Claude Code, Cursor, Windsurf, Cline, Continue, Zed, and Google Antigravity**.
 
 ## Install
 
@@ -10,32 +12,38 @@ MCP server for codebase structure analysis. Provides dependency graphs, communit
 npm install -g graphmycode-mcp
 ```
 
-The postinstall script automatically:
-1. Registers the MCP server in Claude Code (`~/.claude/claude.json`)
-2. Installs 9 slash commands in `~/.claude/commands/`
+The postinstall script automatically registers the MCP server in **Claude Code** and installs 9 slash commands.
 
-Restart Claude Code after installing to activate.
-
----
-
-### If the postinstall was skipped
-
-This happens when installing with `--ignore-scripts` or in CI environments. Run setup manually:
+To register in other editors, run:
 
 ```bash
-graphmycode-mcp setup
+graphmycode-mcp setup --all          # all supported editors
+graphmycode-mcp setup cursor         # Cursor only
+graphmycode-mcp setup windsurf       # Windsurf only
+graphmycode-mcp setup cline          # Cline (VSCode) only
+graphmycode-mcp setup continue       # Continue only
+graphmycode-mcp setup zed            # Zed only
+graphmycode-mcp setup antigravity    # Google Antigravity only
 ```
 
+Restart your editor(s) after setup.
+
 ---
 
-### Manual registration (clone/dev install)
+## Manual configuration per editor
 
-If you cloned the repo instead of installing from npm:
+If you prefer to configure manually, add the following snippet to each editor's config file.
+
+### Claude Code
 
 ```bash
-npm install
-npm run build
-node_path=$(which node)   # get absolute path — e.g. /opt/homebrew/bin/node
+claude mcp add -s user graphmycode -- node $(npm root -g)/graphmycode-mcp/dist/index.js
+```
+
+Or if you cloned the repo:
+
+```bash
+node_path=$(which node)
 dist_path=$(pwd)/dist/index.js
 claude mcp add -s user graphmycode -- "$node_path" "$dist_path"
 ```
@@ -44,6 +52,102 @@ Then copy the slash commands:
 
 ```bash
 cp commands/*.md ~/.claude/commands/
+```
+
+### Cursor
+
+File: `~/.cursor/mcp.json`
+
+```json
+{
+  "mcpServers": {
+    "graphmycode": {
+      "command": "npx",
+      "args": ["-y", "graphmycode-mcp"]
+    }
+  }
+}
+```
+
+### Windsurf
+
+File: `~/.codeium/windsurf/mcp_config.json`
+
+```json
+{
+  "mcpServers": {
+    "graphmycode": {
+      "command": "npx",
+      "args": ["-y", "graphmycode-mcp"]
+    }
+  }
+}
+```
+
+### Cline (VSCode extension)
+
+Open **Cline → MCP Servers → Configure MCP Servers** and add:
+
+```json
+{
+  "mcpServers": {
+    "graphmycode": {
+      "command": "npx",
+      "args": ["-y", "graphmycode-mcp"],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+### Continue
+
+Create the file `~/.continue/mcpServers/graphmycode.json`:
+
+```json
+{
+  "mcpServers": {
+    "graphmycode": {
+      "command": "npx",
+      "args": ["-y", "graphmycode-mcp"]
+    }
+  }
+}
+```
+
+Continue automatically picks up JSON files from `~/.continue/mcpServers/`.
+
+### Google Antigravity
+
+File: `~/.gemini/config/mcp_config.json` (macOS/Linux)
+File: `C:\Users\<USER>\.gemini\antigravity\mcp_config.json` (Windows)
+
+```json
+{
+  "mcpServers": {
+    "graphmycode": {
+      "command": "npx",
+      "args": ["-y", "graphmycode-mcp"]
+    }
+  }
+}
+```
+
+### Zed
+
+File: `~/.config/zed/settings.json`
+
+```json
+{
+  "context_servers": {
+    "graphmycode-mcp": {
+      "source": "custom",
+      "command": "npx",
+      "args": ["-y", "graphmycode-mcp"]
+    }
+  }
+}
 ```
 
 ---
@@ -60,9 +164,7 @@ cp commands/*.md ~/.claude/commands/
 | `query_graph` | Natural language queries over the graph |
 | `export_agent_context` | Generate `CLAUDE.md` / `AGENTS.md` for the codebase |
 
-## Slash Commands
-
-Once installed, these commands are available in Claude Code:
+## Slash Commands (Claude Code only)
 
 | Command | Description |
 |---------|-------------|
@@ -83,7 +185,7 @@ For an interactive visual graph of your codebase, visit **[graphmycode.com](http
 ## Requirements
 
 - Node.js 18+
-- [Claude Code](https://claude.ai/code) CLI installed and configured
+- At least one of: Claude Code, Cursor, Windsurf, Cline, Continue, Zed, or Google Antigravity
 
 ## License
 

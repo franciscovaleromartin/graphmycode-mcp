@@ -1,6 +1,6 @@
 {
   "name": "graphmycode-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server for codebase structure analysis — dependency graphs, communities, hotspots, and agent context generation",
   "type": "module",
   "main": "dist/index.js",
@@ -23,6 +23,13 @@
   "keywords": [
     "mcp",
     "claude",
+    "cursor",
+    "windsurf",
+    "cline",
+    "continue",
+    "zed",
+    "antigravity",
+    "google-antigravity",
     "codebase",
     "dependency-graph",
     "code-analysis",
