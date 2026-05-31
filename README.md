@@ -1,5 +1,7 @@
 # graphmycode-mcp
 
+[![npm version](https://img.shields.io/npm/v/graphmycode-mcp)](https://www.npmjs.com/package/graphmycode-mcp)
+
 MCP server for codebase structure analysis. Provides dependency graphs, community detection, hotspot identification, and agent context generation directly inside Claude Code.
 
 ## Install
@@ -10,7 +12,7 @@ npm install -g graphmycode-mcp
 
 The postinstall script automatically:
 1. Registers the MCP server in Claude Code (`~/.claude/claude.json`)
-2. Installs 8 slash commands in `~/.claude/commands/`
+2. Installs 9 slash commands in `~/.claude/commands/`
 
 Restart Claude Code after installing to activate.
 
