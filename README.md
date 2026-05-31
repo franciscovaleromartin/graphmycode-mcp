@@ -2,50 +2,43 @@
 
 [![npm version](https://img.shields.io/npm/v/graphmycode-mcp)](https://www.npmjs.com/package/graphmycode-mcp)
 
-MCP server that turns any codebase into a dependency graph your AI agent can analyze, query, and use to detect real problems — before touching a single line of code.
+Give your AI agent a **complete, precomputed dependency graph** of any codebase — so it works from a real map of your architecture instead of rebuilding it, file by file, every session.
 
 Works with **Claude Code, Cursor, Windsurf, Cline, Continue, Zed, and Google Antigravity**.
 
 ---
 
-## What it does
+## Why it matters
 
-### Understand the codebase
+On a large codebase, the hardest part isn't writing code — it's understanding what's connected to what. Which files are load-bearing? Where are the import cycles? What's dead weight nobody uses anymore?
 
-**"How is this thing organized?"**
+Answering those questions properly means looking at the **whole** repo at once. `graphmycode-mcp` does that analysis up front and hands your agent the result:
 
-- Builds a **full dependency graph**: what each file imports, who imports it, and how many connections it has.
-- Detects the **tech stack** automatically: languages, frameworks, package manager, and project type.
-- Identifies **entry points** (main, index, CLI) with no configuration needed.
+- **Complete, not approximate.** Importers, coupling, dead code — measured across every file, not guessed from a sample.
+- **Real graph analysis.** Circular dependencies and module clustering come from proven graph algorithms (Louvain community detection), so the agent catches structural problems that are easy to miss reading code linearly.
+- **Lean on context.** Your agent gets a compact, accurate map from the first message — leaving its context budget for the actual work.
 
-### Detect problems
+The result: faster onboarding to unfamiliar code, sharper refactor decisions, and an agent that understands your project's real shape from message one.
 
-**"Where are the weak spots?"**
+---
 
-- **Hotspots** — files everything else depends on. If they change, a lot breaks. High refactor priority.
-- **Dead code** — files nobody imports. Safe to delete.
-- **Circular dependencies** — import cycles that make testing and maintenance painful.
-- **Coupling metrics** — fanIn, fanOut, edge count. One look tells you if the project is healthy or not.
+## What it gives your agent
 
-### Understand the architecture
+### A real dependency graph
+Every file's imports, who imports it, and how connected it is — across the whole project.
 
-**"What does each part actually do?"**
+### Problem detection at the architecture level
+- **Hotspots** — the files everything depends on. High blast radius, top refactor priority.
+- **Dead code** — files nobody imports. Safe to remove.
+- **Circular dependencies** — import cycles that quietly make testing and maintenance harder.
+- **Coupling metrics** — `fanIn`, `fanOut`, and edge count at a glance.
 
-- **Module communities** — groups related files into functional clusters detected by graph analysis. Reveals the real architecture, not the one the user thinks they have.
-- **Architectural layers** — checks whether the project respects layer separation or violates it.
+### Architecture as it actually is
+- **Module communities** — functional clusters surfaced by graph analysis, revealing the structure that really exists.
+- **Architectural layers** — whether the project respects layer separation or violates it.
 
-### Ask in plain language
-
-**"Who imports this file?", "Are there cycles?", "What's unused?"**
-
-- The `query_graph` tool accepts natural language questions about the code — no need to understand the graph format.
-
-### Give your AI agent real context
-
-**"I want the agent to understand my project from message one"**
-
-- Generates a **`CLAUDE.md`** or **`AGENTS.md`** automatically, with the stack, build/test commands, module map, most critical files, and key dependencies.
-- The agent starts with actual project context, not generic assumptions.
+### Instant project context
+`export_agent_context` generates a `CLAUDE.md` / `AGENTS.md` with the stack, build/test commands, module map, most critical files, and key dependencies — so your agent starts grounded in your project, not in generic assumptions.
 
 ---
 
@@ -55,9 +48,9 @@ Works with **Claude Code, Cursor, Windsurf, Cline, Continue, Zed, and Google Ant
 npm install -g graphmycode-mcp
 ```
 
-The postinstall script automatically registers the MCP server in **Claude Code** and installs 9 slash commands.
+The postinstall script registers the MCP server in **Claude Code** and installs 9 slash commands.
 
-To register in other editors, run:
+For other editors:
 
 ```bash
 graphmycode-mcp setup --all          # all supported editors
@@ -144,7 +137,7 @@ Open **Cline → MCP Servers → Configure MCP Servers** and add:
 
 ### Continue
 
-Create the file `~/.continue/mcpServers/graphmycode.json`:
+File: `~/.continue/mcpServers/graphmycode.json`
 
 ```json
 {
@@ -157,11 +150,11 @@ Create the file `~/.continue/mcpServers/graphmycode.json`:
 }
 ```
 
-Continue automatically picks up JSON files from `~/.continue/mcpServers/`.
+Continue auto-loads JSON files from `~/.continue/mcpServers/`.
 
 ### Google Antigravity
 
-File: `~/.gemini/config/mcp_config.json` (macOS/Linux)  
+File: `~/.gemini/config/mcp_config.json` (macOS/Linux)
 File: `C:\Users\<USER>\.gemini\antigravity\mcp_config.json` (Windows)
 
 ```json
@@ -196,28 +189,30 @@ File: `~/.config/zed/settings.json`
 ## Tools
 
 | Tool | Description |
-|------|-------------|
+| --- | --- |
 | `analyze_structure` | Full dependency graph with hotspots, dead code, and coupling metrics |
-| `detect_stack` | Languages, frameworks, and project type |
-| `get_file_dependencies` | Imports and importedBy for a specific file |
 | `get_communities` | Module clusters detected via graph analysis |
-| `find_entry_points` | Files with no importers (CLI, main, index) |
-| `query_graph` | Natural language queries over the graph |
+| `get_file_dependencies` | Imports and importedBy for a specific file |
 | `export_agent_context` | Generate `CLAUDE.md` / `AGENTS.md` for the codebase |
+| `find_entry_points` | Files with no importers (CLI, main, index) |
+| `detect_stack` | Languages, frameworks, and project type |
+| `query_graph` | Natural language queries over the graph |
+
+---
 
 ## Slash Commands (Claude Code only)
 
 | Command | Description |
-|---------|-------------|
+| --- | --- |
 | `/graphmycode` | Hotspots, dead code, coupling summary |
 | `/graphmycode-analysis` | Full analysis cycle with improvement plan |
-| `/graphmycode-context` | Generate CLAUDE.md / AGENTS.md for the codebase |
+| `/graphmycode-context` | Generate CLAUDE.md / AGENTS.md |
 | `/graphmycode-debt` | Prioritized technical debt backlog (P1/P2/P3) |
-| `/graphmycode-flow` | Execution flow from entry points |
 | `/graphmycode-heatmap` | Circular dependencies and hotspot heatmap |
-| `/graphmycode-layers` | Architectural layers and violations |
 | `/graphmycode-semantic` | Module communities and logical duplication |
+| `/graphmycode-layers` | Architectural layers and violations |
 | `/graphmycode-structural` | Structural dependency deep-dive |
+| `/graphmycode-flow` | Execution flow from entry points |
 
 ---
 
