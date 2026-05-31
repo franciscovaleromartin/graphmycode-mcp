@@ -68,7 +68,7 @@ Once installed, these commands are available in Claude Code:
 | `/graphmycode-debt` | Prioritized technical debt backlog (P1/P2/P3) |
 | `/graphmycode-flow` | Execution flow from entry points |
 | `/graphmycode-heatmap` | Circular dependencies and hotspot heatmap |
-| `/graphmycode-iterate` | Full analysis cycle with improvement plan |
+| `/graphmycode-analysis` | Full analysis cycle with improvement plan |
 | `/graphmycode-layers` | Architectural layers and violations |
 | `/graphmycode-semantic` | Module communities and logical duplication |
 | `/graphmycode-structural` | Structural dependency deep-dive |
