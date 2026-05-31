@@ -44,6 +44,17 @@ const LANG_MAP: Record<string, string> = {
 }
 
 const ENTRY_NAMES = new Set(['main', 'index', 'app', 'server', 'cli', 'entry', 'bootstrap'])
+const TEST_DIRS = ['tests/', 'test/', '__tests__/', 'spec/', 'specs/']
+const TEST_SUFFIXES = ['.test.', '.spec.', '_test.', '_spec.']
+
+function isDeadCodeCandidate(id: string): boolean {
+  const normalized = id.replace(/\\/g, '/')
+  if (TEST_DIRS.some(d => normalized.includes(d))) return false
+  if (TEST_SUFFIXES.some(s => normalized.includes(s))) return false
+  const base = path.basename(normalized, path.extname(normalized)).toLowerCase()
+  if (ENTRY_NAMES.has(base)) return false
+  return true
+}
 const ENTRY_PATH_PATTERNS = ['/pages/', '/routes/', '/controllers/', '/app/']
 const TRY_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.py', '.php']
 const TRY_INDEX_SUFFIXES = [
@@ -162,7 +173,7 @@ export function computeMetrics(
     .sort((a, b) => b.fanIn - a.fanIn)
 
   const deadCode = nodeList
-    .filter(n => n.importedBy.length === 0)
+    .filter(n => n.importedBy.length === 0 && isDeadCodeCandidate(n.id))
     .map(n => n.id)
 
   const avgFanIn = fileCount > 0

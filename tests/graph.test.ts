@@ -54,6 +54,12 @@ describe('computeMetrics', () => {
     const m = computeMetrics(g, { hotspotThreshold: 1 })
     expect(m.hotspots.map(h => h.file)).toContain('src/utils.ts')
   })
+
+  it('does not flag entry points or test files as dead code', async () => {
+    const g = await buildGraph(TS)
+    const m = computeMetrics(g)
+    expect(m.deadCode).not.toContain('src/index.ts')
+  })
 })
 
 describe('detectEntryPoints', () => {
