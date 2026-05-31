@@ -76,6 +76,10 @@ Once installed, these commands are available in Claude Code:
 | `/graphmycode-semantic` | Module communities and logical duplication |
 | `/graphmycode-structural` | Structural dependency deep-dive |
 
+## Visual interface
+
+For an interactive visual graph of your codebase, visit **[graphmycode.com](https://graphmycode.com)**.
+
 ## Requirements
 
 - Node.js 18+
